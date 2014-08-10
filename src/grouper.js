@@ -1,9 +1,11 @@
 /* globals define */
-var fn = function () {
+var f = function () {
 
   'use strict';
 
   return function(arr, props) {
+
+    props = typeof props === 'string' ? [props] : props;
 
     var propsLen = props.length;
     if (!propsLen) {
@@ -58,4 +60,4 @@ var fn = function () {
   } else {
     root.grouper = factory(root);
   }
-})(this, fn);
+})(this, f);
