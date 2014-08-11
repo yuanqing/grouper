@@ -1,48 +1,41 @@
 var gulp = require('gulp'),
+    istanbul = require('gulp-istanbul'),
+    jasmine = require('gulp-jasmine'),
     jshint = require('gulp-jshint'),
-    karma = require('gulp-karma'),
-    plumber = require('gulp-plumber'),
-    rename = require('gulp-rename'),
-    rimraf = require('gulp-rimraf'),
-    uglify = require('gulp-uglify');
+    plumber = require('gulp-plumber');
 
 var paths = {
-  src: ['src/*.js'],
-  test: ['test/spec/**/*.spec.js'],
-  dist: 'dist/'
+  src: ['index.js'],
+  test: ['spec/**/*.spec.js'],
+  coverage: './coverage'
 };
 
-gulp.task('lint', function () {
+gulp.task('lint', function() {
   return gulp.src([__filename].concat(paths.src).concat(paths.test))
     .pipe(plumber())
     .pipe(jshint())
     .pipe(jshint.reporter('jshint-stylish'));
 });
 
-gulp.task('clean', function () {
-  return gulp.src(paths.dist, { read: false })
-    .pipe(plumber())
-    .pipe(rimraf());
-});
-
-gulp.task('dist', ['clean'], function () {
+gulp.task('test', function() {
   return gulp.src(paths.src)
     .pipe(plumber())
-    .pipe(gulp.dest(paths.dist))
-    .pipe(rename({ suffix: '.min' }))
-    .pipe(uglify())
-    .pipe(gulp.dest(paths.dist));
-});
-
-gulp.task('test', function () {
-  return gulp.src(paths.src.concat(paths.test))
-    .pipe(plumber())
-    .pipe(karma({ configFile: 'test/karma.conf.js' }))
-    .on('error', function (err) { throw err; });
+    .pipe(istanbul())
+    .on('finish', function() {
+      gulp.src(paths.test)
+        .pipe(jasmine({
+          verbose: true,
+          includeStackTrace: true
+        }))
+        .on('error', function(err) { throw err; })
+        .pipe(istanbul.writeReports({
+          dir: paths.coverage,
+          reporters: ['lcov']
+        }));
+    });
 });
 
 gulp.task('default', [
   'lint',
-  'dist',
   'test'
 ]);

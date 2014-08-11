@@ -1,4 +1,7 @@
-/* globals describe, it, expect, grouper */
+/* globals describe, it, expect */
+'use strict';
+
+var grouper = require('..');
 
 describe('grouper', function() {
 
