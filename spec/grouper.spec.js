@@ -3,7 +3,7 @@
 
 var grouper = require('..');
 
-describe('grouper', function() {
+describe('grouper(arr, props)', function() {
 
   var arr = [
     { name: 'foo', age: 2, score: 0 },
@@ -12,7 +12,7 @@ describe('grouper', function() {
     { name: 'qux', age: 2, score: 1 }
   ];
 
-  it('should return `arr` if `props` is empty', function() {
+  it('returns the `arr` if `props` is empty', function() {
     expect(grouper(arr, [])).toEqual(arr);
   });
 
