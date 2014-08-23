@@ -1,6 +1,6 @@
 {
   "name": "grouper",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Group objects by their properties.",
   "author": "Lim Yuan Qing",
   "license": "MIT",

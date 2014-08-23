@@ -2,6 +2,8 @@
 
 > Group objects by their properties.
 
+## Usage
+
 ```js
 var arr = [
   { name: 'foo', age: 2, score: 0 },
