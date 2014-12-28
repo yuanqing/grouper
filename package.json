@@ -1,6 +1,6 @@
 {
   "name": "grouper",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Assign objects into groups by one or more properties, by object value, or by using a comparator function.",
   "author": "Lim Yuan Qing",
   "license": "MIT",
