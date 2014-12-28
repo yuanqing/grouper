@@ -9,16 +9,15 @@
     "url": "git://github.com/yuanqing/grouper.git"
   },
   "devDependencies": {
-    "istanbul": "^0.3.0",
-    "jasmine-node": "^1.14.5",
-    "jshint": "^2.5.4",
-    "jshint-stylish": "^0.4.0"
+    "istanbul": "^0.3.5",
+    "jshint": "^2.5.11",
+    "jshint-stylish": "^1.0.0",
+    "minijasminenode2": "^1.0.0"
   },
   "scripts": {
-    "cover": "node_modules/.bin/istanbul cover node_modules/.bin/jasmine-node ./spec -x **/spec/**",
-    "lint": "node_modules/.bin/jshint --verbose --reporter node_modules/jshint-stylish/stylish.js index.js",
-    "lint-test": "node_modules/.bin/jshint --verbose --reporter node_modules/jshint-stylish/stylish.js ./spec/*.js",
-    "test": "node_modules/.bin/jasmine-node spec --verbose"
+    "lint": "node_modules/.bin/jshint --reporter=node_modules/jshint-stylish/stylish.js --verbose index.js test/*.spec.js",
+    "test": "rm -rf coverage && node_modules/.bin/istanbul cover -- node_modules/.bin/minijasminenode2 test/*.spec.js --verbose",
+    "build": "npm run lint && npm test"
   },
   "keywords": [
     "group",

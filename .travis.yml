@@ -5,9 +5,7 @@ node_js:
   - '0.11'
 
 script:
-  - npm run-script lint
-  - npm run-script lint-test
-  - npm run-script cover
+  - npm run build
 
 after_success:
   - npm i coveralls
