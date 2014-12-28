@@ -13,8 +13,5 @@
   "noarg": true,
   "quotmark": false,
   "undef": true,
-  "unused": true,
-  "globals": {
-    "define": true
-  }
+  "unused": true
 }
