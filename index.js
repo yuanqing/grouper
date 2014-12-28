@@ -1,43 +1,61 @@
 'use strict';
 
-var grouper = function(arr, props) {
+var deepEqual = require('deep-equal');
+var get = require('jaunt').get;
 
-  props = typeof props === 'string' ? [props] : props;
+var grouper = function(arr, props, opts) {
 
-  var propsLen = props.length;
-  if (!propsLen) {
-    return arr;
+  opts = opts || {};
+  if (typeof opts.strict === 'undefined') {
+    opts.strict = true; // default to strict `===`
   }
 
-  var result = [],
-      arrLen = arr.length,
-      resultLen,
-      added,
-      same,
-      i, j, k;
-
-  for (i = 0; i < arrLen; ++i) {
-
-    added = false; // was `arr[i]` added to `result`?
-    resultLen = result.length;
-    for (j = 0; !added && j < resultLen; ++j) {
-
-      same = true; // does `arr[i]` have the same values as `result[j][0]` for all `props`?
-      for (k = 0; same && k < propsLen; ++k) {
-        if (result[j][0][props[k]] !== arr[i][props[k]]) {
-          same = false;
+  props = [].concat(props).filter(Boolean);
+  var propsLen = props.length;
+  var comparator;
+  if (propsLen === 0) {
+    comparator = function(a, b) {
+      return deepEqual(a, b, opts);
+    };
+  } else {
+    comparator = function(a, b, props) {
+      var k = -1;
+      while (++k < propsLen) {
+        // check if `a` has the same values as `b` for every property in `props`
+        var prop = props[k];
+        if (!deepEqual(get(a, prop), get(b, prop), opts)) {
+          return false;
         }
       }
+      return true;
+    };
+  }
 
-      if (same) { // same `props`, so add `arr[i]` to `result[j]`
+  var result = [];
+
+  // for every `arr[i]` in `arr`...
+  var arrLen = arr.length;
+  var i = -1;
+  while (++i < arrLen) {
+
+    // for every `result[j]` group in `result`...
+    var wasAdded = false;
+    var resultLen = result.length;
+    var j = -1;
+    while (++j < resultLen) {
+
+      // check if `arr[i]` belongs to the `result[j]` group
+      if (comparator(arr[i], result[j][0], props)) {
         result[j].push(arr[i]);
-        added = true;
+        wasAdded = true;
       }
 
     }
 
-    if (!added) { // `arr[i]` not added, so add a new group containing only `arr[i]` to `result`
-      result[resultLen] = [arr[i]];
+    // if `arr[i]` was not added to any group, create a new group containing only `arr[i]`
+    // and add it to `result`
+    if (!wasAdded) {
+      result.push([arr[i]]);
     }
 
   }
@@ -46,4 +64,4 @@ var grouper = function(arr, props) {
 
 };
 
-module.exports = exports = grouper;
+module.exports = grouper;
